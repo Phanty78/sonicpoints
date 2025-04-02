@@ -1,4 +1,6 @@
-import './globals.css';
+import { Web3Providers } from '@/components/providers/Web3Providers';
+import '@/styles/globals.css';
+import '@rainbow-me/rainbowkit/styles.css';
 
 export const metadata = {
   title: 'SonicPoints',
@@ -8,7 +10,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Web3Providers>{children}</Web3Providers>
+      </body>
     </html>
   );
 }
