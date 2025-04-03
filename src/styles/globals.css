@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@plugin 'flowbite-react/plugin/tailwindcss';
+@source '../../.flowbite-react/class-list.json';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
@@ -42,7 +44,15 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --animation-shake: shake 1s ease-in-out infinite;
-  --sonic-gradient: linear-gradient(304deg, rgb(255, 203, 103) 0%, rgb(237, 84, 9) 34.85%, rgb(80, 97, 121) 63.64%, rgb(33, 78, 129) 83.85%, rgb(16, 45, 60) 100%) 0% 0% / 100% 100%;
+  --sonic-gradient: linear-gradient(
+      304deg,
+      rgb(255, 203, 103) 0%,
+      rgb(237, 84, 9) 34.85%,
+      rgb(80, 97, 121) 63.64%,
+      rgb(33, 78, 129) 83.85%,
+      rgb(16, 45, 60) 100%
+    )
+    0% 0% / 100% 100%;
   --ring-gradient: linear-gradient(98deg, #7a8fd9, #ac62e4);
 }
 
@@ -125,9 +135,23 @@
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-  20%, 40%, 60%, 80% { transform: translateX(5px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
 }
 
 /* Add these utility classes at the end of your file */
@@ -146,12 +170,12 @@
     -webkit-background-clip: text;
     color: transparent;
   }
-  
+
   /* For the shake animation */
   .animate-shake {
     animation: var(--animation-shake);
   }
-  
+
   /* For using the gradient as a background */
   .bg-sonic-gradient {
     background: var(--sonic-gradient);
@@ -165,16 +189,16 @@
 .border-gradient-sonic {
   position: relative;
   border-radius: var(--radius); /* Utilise votre rayon défini */
-  
+
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
     padding: 2px; /* Épaisseur de la bordure */
     background: var(--sonic-gradient);
-    -webkit-mask: 
-      linear-gradient(#fff 0 0) content-box, 
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;

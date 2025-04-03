@@ -14,7 +14,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning className="flex flex-col items-center justify-center gap-4 mx-2 lg:mx-4">
+      <body
+        suppressHydrationWarning
+        className="mx-2 flex flex-col items-center justify-center gap-4 lg:mx-4"
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
