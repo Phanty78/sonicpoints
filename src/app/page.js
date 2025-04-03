@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 import CircleLoader from 'react-spinners/CircleLoader';
+import { Input } from '@/components/ui/input';
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -20,11 +21,14 @@ export default function Home() {
   const [ringPoints, setRingPoints] = useState('');
   const [siloPoints, setSiloPoints] = useState('');
   const [siloRank, setSiloRank] = useState('');
+  const [inputAddress, setInputAddress] = useState('');
+  const [activeAddress, setActiveAddress] = useState(address);
 
   useEffect(() => {
     async function fetchSonicData() {
+      if (!activeAddress) return;
       try {
-        const response = await fetch(`/api/sonic?address=${address}`);
+        const response = await fetch(`/api/sonic?address=${activeAddress}`);
         if (!response.ok) {
           throw new Error('Error fetching data');
         }
@@ -39,15 +43,16 @@ export default function Home() {
       }
     }
 
-    if (isConnected && address) {
+    if (activeAddress) {
       fetchSonicData();
     }
-  }, [isConnected, address]);
+  }, [isConnected, activeAddress, inputAddress]);
 
   useEffect(() => {
     async function fetchRingData() {
+      if (!activeAddress) return;
       try {
-        const response = await fetch(`/api/ring?address=${address}`);
+        const response = await fetch(`/api/ring?address=${activeAddress}`);
         if (!response.ok) {
           throw new Error('Error fetching data');
         }
@@ -59,15 +64,16 @@ export default function Home() {
       }
     }
 
-    if (isConnected && address) {
+    if (activeAddress) {
       fetchRingData();
     }
-  }, [isConnected, address]);
+  }, [isConnected, activeAddress, inputAddress]);
 
   useEffect(() => {
     async function fetchSiloData() {
+      if (!activeAddress) return;
       try {
-        const response = await fetch(`/api/silo?address=${address}`);
+        const response = await fetch(`/api/silo?address=${activeAddress}`);
         if (!response.ok) {
           throw new Error('Error fetching data');
         }
@@ -80,13 +86,13 @@ export default function Home() {
       }
     }
 
-    if (isConnected && address) {
+    if (activeAddress) {
       fetchSiloData();
     }
-  }, [isConnected, address]);
+  }, [isConnected, activeAddress, inputAddress]);
 
   useEffect(() => {
-    if (!isConnected) {
+    if (!isConnected || activeAddress === '') {
       setSonicData(null);
       setRingData(null);
       setSiloData(null);
@@ -98,7 +104,17 @@ export default function Home() {
       setSiloPoints('');
       setSiloRank('');
     }
-  }, [isConnected]);
+  }, [isConnected, inputAddress]);
+
+  useEffect(() => {
+    if (inputAddress) {
+      setActiveAddress(inputAddress);
+    } else if (address && isConnected) {
+      setActiveAddress(address);
+    } else {
+      setActiveAddress('');
+    }
+  }, [inputAddress, address, isConnected]);
 
   return (
     <main className="container mx-auto flex max-w-[400px] flex-col items-center justify-center gap-8 rounded-lg border-2 border-gray-300 p-4">
@@ -106,6 +122,13 @@ export default function Home() {
         All your Sonic AirDrop points in one place
       </h2>
       <ConnectButton label="Connect Wallet" showBalance={false} />
+      <p className="text-center text-xl">OR</p>
+      <Input
+        type="text"
+        placeholder="Enter your address"
+        value={inputAddress}
+        onChange={(e) => setInputAddress(e.target.value)}
+      />
       {error && <p>Error: {error}</p>}
       <section className="flex flex-col items-center justify-center gap-2">
         <div className="flex items-center justify-center gap-2">
