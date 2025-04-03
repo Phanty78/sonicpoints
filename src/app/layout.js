@@ -5,6 +5,7 @@ import Header from '@/components/layout/header/Header';
 import Footer from '@/components/layout/footer/Footer';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import MainWrapper from '@/components/layout/wrapper/MainWrapper';
+import { Analytics } from "@vercel/analytics/react"
 
 export const metadata = {
   title: 'SonicPoints',
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
               <Header />
               {children}
               <Footer />
+              <Analytics />
             </MainWrapper>
           </Web3Providers>
         </ThemeProvider>
