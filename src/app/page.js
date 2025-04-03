@@ -85,6 +85,21 @@ export default function Home() {
     }
   }, [isConnected, address]);
 
+  useEffect(() => {
+    if (!isConnected) {
+      setSonicData(null);
+      setRingData(null);
+      setSiloData(null);
+      setSonicPoints('');
+      setLiquidityPoints('');
+      setActivePoints('');
+      setSonicRank('');
+      setRingPoints('');
+      setSiloPoints('');
+      setSiloRank('');
+    }
+  }, [isConnected]);
+
   return (
     <main className="container mx-auto flex max-w-[400px] flex-col items-center justify-center gap-8 rounded-lg border-2 border-gray-300 p-4">
       <h2 className="text-center text-2xl font-bold">
