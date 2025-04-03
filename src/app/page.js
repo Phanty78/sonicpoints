@@ -4,6 +4,7 @@ import { useAccount } from '@/hooks/useAccount';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { Separator } from '@/components/ui/separator';
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -11,6 +12,13 @@ export default function Home() {
   const [ringData, setRingData] = useState(null);
   const [siloData, setSiloData] = useState(null);
   const [error, setError] = useState(null);
+  const [sonicPoints, setSonicPoints] = useState('');
+  const [liquidityPoints, setLiquidityPoints] = useState('');
+  const [activePoints, setActivePoints] = useState('');
+  const [sonicRank, setSonicRank] = useState('');
+  const [ringPoints, setRingPoints] = useState('');
+  const [siloPoints, setSiloPoints] = useState('');
+  const [siloRank, setSiloRank] = useState('');
 
   useEffect(() => {
     async function fetchSonicData() {
@@ -21,6 +29,10 @@ export default function Home() {
         }
         const result = await response.json();
         setSonicData(result);
+        setSonicPoints(result.sonic_points.toFixed(1));
+        setLiquidityPoints(result.passive_liquidity_points.toFixed(1));
+        setActivePoints(result.active_liquidity_points.toFixed(1));
+        setSonicRank(result.rank);
       } catch (err) {
         setError(err.message);
       }
@@ -40,6 +52,7 @@ export default function Home() {
         }
         const result = await response.json();
         setRingData(result);
+        setRingPoints(result.total.slice(0, -36));
       } catch (err) {
         setError(err.message);
       }
@@ -59,6 +72,8 @@ export default function Home() {
         }
         const result = await response.json();
         setSiloData(result);
+        setSiloPoints(result.topAccounts[3].points.toFixed(0));
+        setSiloRank(result.topAccounts[3].position);
       } catch (err) {
         setError(err.message);
       }
@@ -70,31 +85,64 @@ export default function Home() {
   }, [isConnected, address]);
 
   return (
-    <main className="flex flex-col items-center justify-center container mx-auto gap-8">
+    <main className="container mx-auto flex max-w-[400px] flex-col items-center justify-center gap-8 rounded-lg border-2 border-gray-300 p-4">
       <h2 className="text-2xl font-bold">All your points in one place</h2>
-      <ConnectButton />
+      <ConnectButton label="Connect Wallet" showBalance={false} />
       {error && <p>Error: {error}</p>}
       <section className="flex flex-col items-center justify-center gap-2">
-        <h3 className="text-lg font-bold">Sonic Points</h3>
-        <Image src="/images/sonic.svg" alt="Sonic" width={20} height={20} />
-        {sonicData ? <p>Sonic Points: {sonicData.sonic_points}</p> : <p>Loading...</p>}
-        {sonicData ? <p>Sonic rank: {sonicData.rank}</p> : <p>Loading...</p>}
-      </section>
-      <section className="flex flex-col items-center justify-center gap-2">
-        <h3 className="text-lg font-bold">Ring Points</h3>
-        <Image src="/images/ring.svg" alt="Ring" width={20} height={20} />
-        {ringData ? <p>Ring Points: {ringData.total}</p> : <p>Loading...</p>}
-      </section>
-      <section className="flex flex-col items-center justify-center gap-2">
-        <h3 className="text-lg font-bold">Silo Points</h3>
-        <Image src="/images/silo.svg" alt="Silo" width={20} height={20} />
-        {siloData && siloData.topAccounts && siloData.topAccounts[3] ? (
-          <p>Silo Points: {siloData.topAccounts[3].points}</p>
+        <div className="flex items-center justify-center gap-2">
+          <Image src="/images/sonic.svg" alt="Sonic" width={20} height={20} />
+          <h3 className="text-lg font-bold">Sonic Points</h3>
+        </div>
+
+        {sonicData ? (
+          <>
+            <p>
+              <strong>Total Sonic Points:</strong> {sonicPoints}
+            </p>
+            <p>
+              <strong>Liquidity points:</strong> {liquidityPoints}
+            </p>
+            <p>
+              <strong>Active points:</strong> {activePoints}
+            </p>
+            <p>
+              <strong>Sonic rank:</strong> {sonicRank}
+            </p>
+          </>
         ) : (
           <p>Loading...</p>
         )}
+      </section>
+      <Separator />
+      <section className="flex flex-col items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-2">
+          <Image src="/images/ring.svg" alt="Ring" width={20} height={20} />
+          <h3 className="text-lg font-bold">Ring Points</h3>
+        </div>
+        {ringData ? (
+          <p>
+            <strong>Ring Points:</strong> {ringPoints}
+          </p>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </section>
+      <Separator />
+      <section className="flex flex-col items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-2">
+          <Image src="/images/silo.svg" alt="Silo" width={20} height={20} />
+          <h3 className="text-lg font-bold">Silo Points</h3>
+        </div>
         {siloData && siloData.topAccounts && siloData.topAccounts[3] ? (
-          <p>Silo rank: {siloData.topAccounts[3].position}</p>
+          <>
+            <p>
+              <strong>Silo Points:</strong> {siloPoints}
+            </p>
+            <p>
+              <strong>Silo rank:</strong> {siloRank}
+            </p>
+          </>
         ) : (
           <p>Loading...</p>
         )}

@@ -6,7 +6,10 @@ export async function GET(request) {
     const address = searchParams.get('address');
 
     if (!address) {
-      return NextResponse.json({ error: 'Address is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Address is required' },
+        { status: 400 }
+      );
     }
 
     const response = await fetch(
@@ -17,6 +20,9 @@ export async function GET(request) {
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error in sonic route:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
