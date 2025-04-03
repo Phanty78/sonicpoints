@@ -12,6 +12,9 @@ export function Web3Providers({ children }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider
+          modalSize='wide'
+          coolMode
+          locale='en-US'
           theme={darkTheme({
             accentColor: '#000000',
             accentColorForeground: 'white',

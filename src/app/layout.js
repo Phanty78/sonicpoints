@@ -4,6 +4,8 @@ import '@rainbow-me/rainbowkit/styles.css';
 import Header from '@/components/layout/header/Header';
 import Footer from '@/components/layout/footer/Footer';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import MainWrapper from '@/components/layout/wrapper/MainWrapper';
+
 export const metadata = {
   title: 'SonicPoints',
   description: 'All your airdrop points in one place',
@@ -12,22 +14,22 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Web3Providers>
+      <body suppressHydrationWarning className="flex flex-col items-center justify-center gap-4 mx-2 lg:mx-4">
         <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          <body className="flex flex-col items-center justify-center gap-4 mx-2 lg:mx-4">    
-                <Header />
-                {children}
-                <Footer />
-          </body>
+          <Web3Providers>
+            <MainWrapper>
+              <Header />
+              {children}
+              <Footer />
+            </MainWrapper>
+          </Web3Providers>
         </ThemeProvider>
-      </Web3Providers>
+      </body>
     </html>
   );
 }
-
-// TODO: ajout de l'animation du footer

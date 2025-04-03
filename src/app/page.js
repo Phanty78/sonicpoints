@@ -86,13 +86,13 @@ export default function Home() {
 
   return (
     <main className="container mx-auto flex max-w-[400px] flex-col items-center justify-center gap-8 rounded-lg border-2 border-gray-300 p-4">
-      <h2 className="text-2xl font-bold">All your points in one place</h2>
+      <h2 className="text-2xl font-bold text-center">All your Sonic AirDrop points in one place</h2>
       <ConnectButton label="Connect Wallet" showBalance={false} />
       {error && <p>Error: {error}</p>}
       <section className="flex flex-col items-center justify-center gap-2">
         <div className="flex items-center justify-center gap-2">
           <Image src="/images/sonic.svg" alt="Sonic" width={20} height={20} />
-          <h3 className="text-lg font-bold">Sonic Points</h3>
+          <h3 className="text-xl font-bold text-sonic-gradient">Sonic Points</h3>
         </div>
 
         {sonicData ? (
@@ -118,7 +118,7 @@ export default function Home() {
       <section className="flex flex-col items-center justify-center gap-2">
         <div className="flex items-center justify-center gap-2">
           <Image src="/images/ring.svg" alt="Ring" width={20} height={20} />
-          <h3 className="text-lg font-bold">Ring Points</h3>
+          <h3 className="text-xl font-bold text-ring-gradient">Ring Points</h3>
         </div>
         {ringData ? (
           <p>
@@ -132,7 +132,7 @@ export default function Home() {
       <section className="flex flex-col items-center justify-center gap-2">
         <div className="flex items-center justify-center gap-2">
           <Image src="/images/silo.svg" alt="Silo" width={20} height={20} />
-          <h3 className="text-lg font-bold">Silo Points</h3>
+          <h3 className="text-xl font-bold dark:bg-black dark:text-foreground dark:rounded-2xl dark:px-2">Silo Points</h3>
         </div>
         {siloData && siloData.topAccounts && siloData.topAccounts[3] ? (
           <>
