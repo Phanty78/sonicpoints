@@ -13,19 +13,21 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <Web3Providers>
-        <body className="mx-2 flex flex-col items-center justify-center gap-4 lg:mx-4">
-          <ThemeProvider
+        <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-          >
-            <Header />
-            {children}
-            <Footer />
-          </ThemeProvider>
-        </body>
+        >
+          <body className="flex flex-col items-center justify-center gap-4 mx-2 lg:mx-4">    
+                <Header />
+                {children}
+                <Footer />
+          </body>
+        </ThemeProvider>
       </Web3Providers>
     </html>
   );
 }
+
+// TODO: ajout de l'animation du footer
