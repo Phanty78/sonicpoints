@@ -9,6 +9,12 @@ import CircleLoader from 'react-spinners/CircleLoader';
 import { Input } from '@/components/ui/input';
 import { getLocalStorage, setLocalStorage } from '@/utils/localStorage';
 import { getDate, hasBeenMoreThan24Hours, formatDate } from '@/utils/dates';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+
 export default function Home() {
   const { address, isConnected } = useAccount();
   const [sonicData, setSonicData] = useState(null);
@@ -221,39 +227,67 @@ export default function Home() {
           <>
             <p>
               <strong>Total Sonic Points:</strong> {sonicPoints}{' '}
-              {localData &&
-                sonicData &&
-                DisplayDifference(
-                  sonicData.sonic_points,
-                  localData.sonicData.sonicPoints
-                )}
+              {localData && sonicData && (
+                <Tooltip>
+                  <TooltipTrigger>
+                    {DisplayDifference(
+                      sonicData.sonic_points,
+                      localData.sonicData.sonicPoints
+                    )}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Sonic points difference since last update</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </p>
             <p>
               <strong>Liquidity points:</strong> {liquidityPoints}{' '}
-              {localData &&
-                sonicData &&
-                DisplayDifference(
-                  sonicData.passive_liquidity_points,
-                  localData.sonicData.liquidityPoints
-                )}
+              {localData && sonicData && (
+                <Tooltip>
+                  <TooltipTrigger>
+                    {DisplayDifference(
+                      sonicData.passive_liquidity_points,
+                      localData.sonicData.liquidityPoints
+                    )}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Liquidity points difference since last update</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </p>
             <p>
               <strong>Active points:</strong> {activePoints}{' '}
-              {localData &&
-                sonicData &&
-                DisplayDifference(
-                  sonicData.active_liquidity_points,
-                  localData.sonicData.activePoints
-                )}
+              {localData && sonicData && (
+                <Tooltip>
+                  <TooltipTrigger>
+                    {DisplayDifference(
+                      sonicData.active_liquidity_points,
+                      localData.sonicData.activePoints
+                    )}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Active points difference since last update</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </p>
             <p>
               <strong>Sonic rank:</strong> {sonicRank}
-              {localData &&
-                sonicData &&
-                DisplayDifference(
-                  sonicData.rank,
-                  localData.sonicData.sonicRank
-                )}
+              {localData && sonicData && (
+                <Tooltip>
+                  <TooltipTrigger>
+                    {DisplayDifference(
+                      sonicData.rank,
+                      localData.sonicData.sonicRank
+                    )}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Sonic rank difference since last update</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </p>
           </>
         ) : (
@@ -269,12 +303,19 @@ export default function Home() {
         {ringData ? (
           <p>
             <strong>Ring Points:</strong> {ringPoints}{' '}
-            {localData &&
-              ringData &&
-              DisplayDifference(
-                ringData.total.slice(0, -36),
-                localData.ringData.ringPoints
-              )}
+            {localData && ringData && (
+              <Tooltip>
+                <TooltipTrigger>
+                  {DisplayDifference(
+                    ringData.total.slice(0, -36),
+                    localData.ringData.ringPoints
+                  )}
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Ring points difference since last update</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
           </p>
         ) : (
           <CircleLoader color="orange" size={20} />
@@ -292,21 +333,35 @@ export default function Home() {
           <>
             <p>
               <strong>Silo Points:</strong> {siloPoints}{' '}
-              {localData &&
-                siloData &&
-                DisplayDifference(
-                  siloData.topAccounts[3].points,
-                  localData.siloData.siloPoints
-                )}
+              {localData && siloData && (
+                <Tooltip>
+                  <TooltipTrigger>
+                    {DisplayDifference(
+                      siloData.topAccounts[3].points,
+                      localData.siloData.siloPoints
+                    )}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Silo points difference since last update</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </p>
             <p>
               <strong>Silo rank:</strong> {siloRank}{' '}
-              {localData &&
-                siloData &&
-                DisplayDifference(
-                  siloData.topAccounts[3].position,
-                  localData.siloData.siloRank
-                )}
+              {localData && siloData && (
+                <Tooltip>
+                  <TooltipTrigger>
+                    {DisplayDifference(
+                      siloData.topAccounts[3].position,
+                      localData.siloData.siloRank
+                    )}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Silo rank difference since last update</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </p>
           </>
         ) : (
