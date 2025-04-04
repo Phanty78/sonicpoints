@@ -183,6 +183,7 @@ export default function Home() {
       <h2 className="text-center text-2xl font-bold">
         All your Sonic AirDrop points in one place
       </h2>
+      <Separator />
       <ConnectButton label="Connect Wallet" showBalance={false} />
       <p className="text-center text-xl">OR</p>
       <Input
@@ -192,6 +193,7 @@ export default function Home() {
         onChange={(e) => setInputAddress(e.target.value)}
       />
       {error && <p>Error: {error}</p>}
+      <Separator />
       <section className="flex flex-col items-center justify-center gap-2">
         <div className="flex items-center justify-center gap-2">
           <Image src="/images/sonic.svg" alt="Sonic" width={20} height={20} />
