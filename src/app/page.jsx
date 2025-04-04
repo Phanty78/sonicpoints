@@ -178,6 +178,21 @@ export default function Home() {
     console.log(localData);
   }, [localData]);
 
+  function DisplayDifference(data, localData) {
+    if (localData && sonicData && ringData && siloData) {
+      const difference = data - localData;
+      if (difference > 0) {
+        return <span className="text-green-500">+{difference.toFixed(1)}</span>;
+      } else if (difference === 0) {
+        return (
+          <span className="text-orange-500">+{difference.toFixed(1)}</span>
+        );
+      } else {
+        return <span className="text-red-500">{difference.toFixed(1)}</span>;
+      }
+    }
+  }
+
   return (
     <main className="container mx-auto flex max-w-[400px] flex-col items-center justify-center gap-8 rounded-lg border-2 border-gray-300 p-4">
       <h2 className="text-center text-2xl font-bold">
@@ -205,39 +220,29 @@ export default function Home() {
         {sonicData ? (
           <>
             <p>
-              <strong>Total Sonic Points:</strong> {sonicPoints}
+              <strong>Total Sonic Points:</strong> {sonicPoints}{' '}
+              {DisplayDifference(
+                sonicData.sonic_points,
+                localData.sonicData.sonicPoints
+              )}
             </p>
             <p>
-              <strong>Liquidity points:</strong> {liquidityPoints}
+              <strong>Liquidity points:</strong> {liquidityPoints}{' '}
+              {DisplayDifference(
+                sonicData.passive_liquidity_points,
+                localData.sonicData.liquidityPoints
+              )}
             </p>
             <p>
-              <strong>Active points:</strong> {activePoints}
+              <strong>Active points:</strong> {activePoints}{' '}
+              {DisplayDifference(
+                sonicData.active_liquidity_points,
+                localData.sonicData.activePoints
+              )}
             </p>
             <p>
               <strong>Sonic rank:</strong> {sonicRank}
-            </p>
-          </>
-        ) : (
-          <CircleLoader color="orange" size={20} />
-        )}
-        {localData && localData.sonicData ? (
-          <>
-            <p>
-              <strong>Last update:</strong> {formatDate(localData.date)}
-            </p>
-            <p>
-              <strong>Total Sonic Points:</strong>{' '}
-              {localData.sonicData.sonicPoints}
-            </p>
-            <p>
-              <strong>Liquidity points:</strong>{' '}
-              {localData.sonicData.liquidityPoints}
-            </p>
-            <p>
-              <strong>Active points:</strong> {localData.sonicData.activePoints}
-            </p>
-            <p>
-              <strong>Sonic rank:</strong> {localData.sonicData.sonicRank}
+              {DisplayDifference(sonicData.rank, localData.sonicData.sonicRank)}
             </p>
           </>
         ) : (
@@ -252,14 +257,11 @@ export default function Home() {
         </div>
         {ringData ? (
           <p>
-            <strong>Ring Points:</strong> {ringPoints}
-          </p>
-        ) : (
-          <CircleLoader color="orange" size={20} />
-        )}
-        {localData && localData.ringData ? (
-          <p>
-            <strong>Ring Points:</strong> {localData.ringData.ringPoints}
+            <strong>Ring Points:</strong> {ringPoints}{' '}
+            {DisplayDifference(
+              ringData.total.slice(0, -36),
+              localData.ringData.ringPoints
+            )}
           </p>
         ) : (
           <CircleLoader color="orange" size={20} />
@@ -276,22 +278,18 @@ export default function Home() {
         {siloData && siloData.topAccounts && siloData.topAccounts[3] ? (
           <>
             <p>
-              <strong>Silo Points:</strong> {siloPoints}
+              <strong>Silo Points:</strong> {siloPoints}{' '}
+              {DisplayDifference(
+                siloData.topAccounts[3].points,
+                localData.siloData.siloPoints
+              )}
             </p>
             <p>
-              <strong>Silo rank:</strong> {siloRank}
-            </p>
-          </>
-        ) : (
-          <CircleLoader color="orange" size={20} />
-        )}
-        {localData && localData.siloData ? (
-          <>
-            <p>
-              <strong>Silo Points:</strong> {localData.siloData.siloPoints}
-            </p>
-            <p>
-              <strong>Silo rank:</strong> {localData.siloData.siloRank}
+              <strong>Silo rank:</strong> {siloRank}{' '}
+              {DisplayDifference(
+                siloData.topAccounts[3].position,
+                localData.siloData.siloRank
+              )}
             </p>
           </>
         ) : (
