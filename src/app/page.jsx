@@ -185,17 +185,23 @@ export default function Home() {
       <h2 className="text-sonic-gradient text-center text-2xl font-bold">
         All your Sonic AirDrop points in one place
       </h2>
+
       <Separator />
-      <ConnectButton label="Connect Wallet" showBalance={false} />
-      <p className="text-center text-xl">OR</p>
-      <Input
-        type="text"
-        placeholder="Enter your address"
-        value={inputAddress}
-        onChange={(e) => setInputAddress(e.target.value)}
-      />
-      {error && <p>Error: {error}</p>}
+
+      <section className="flex flex-col items-center justify-center gap-2">
+        <ConnectButton label="Connect Wallet" showBalance={false} />
+        <p className="text-center text-xl">OR</p>
+        <Input
+          type="text"
+          placeholder="Enter your address"
+          value={inputAddress}
+          onChange={(e) => setInputAddress(e.target.value)}
+        />
+        {error && <p>Error: {error}</p>}
+      </section>
+
       <Separator />
+
       <SonicSection
         sonicData={sonicData}
         localData={localData}
@@ -204,13 +210,17 @@ export default function Home() {
         activePoints={activePoints}
         sonicRank={sonicRank}
       />
+
       <Separator />
+
       <RingSection
         ringData={ringData}
         localData={localData}
         ringPoints={ringPoints}
       />
+
       <Separator />
+
       <SiloSection
         siloData={siloData}
         localData={localData}
