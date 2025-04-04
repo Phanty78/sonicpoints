@@ -221,7 +221,7 @@ export default function Home() {
           <>
             <p>
               <strong>Total Sonic Points:</strong> {sonicPoints}{' '}
-              {localDataData &&
+              {localData &&
                 sonicData &&
                 DisplayDifference(
                   sonicData.sonic_points,
