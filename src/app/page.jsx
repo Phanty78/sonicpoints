@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 import CircleLoader from 'react-spinners/CircleLoader';
 import { Input } from '@/components/ui/input';
-
+import { getLocalStorage, setLocalStorage } from '@/utils/localStorage';
+import { getDate, hasBeenMoreThan24Hours, formatDate } from '@/utils/dates';
 export default function Home() {
   const { address, isConnected } = useAccount();
   const [sonicData, setSonicData] = useState(null);
@@ -23,7 +24,9 @@ export default function Home() {
   const [siloRank, setSiloRank] = useState('');
   const [inputAddress, setInputAddress] = useState('');
   const [activeAddress, setActiveAddress] = useState(address);
+  const [localData, setLocalData] = useState(null);
 
+  // Fetch the sonic data
   useEffect(() => {
     async function fetchSonicData() {
       if (!activeAddress) return;
@@ -48,6 +51,7 @@ export default function Home() {
     }
   }, [isConnected, activeAddress, inputAddress]);
 
+  // Fetch the ring data
   useEffect(() => {
     async function fetchRingData() {
       if (!activeAddress) return;
@@ -69,6 +73,7 @@ export default function Home() {
     }
   }, [isConnected, activeAddress, inputAddress]);
 
+  // Fetch the silo data
   useEffect(() => {
     async function fetchSiloData() {
       if (!activeAddress) return;
@@ -91,6 +96,7 @@ export default function Home() {
     }
   }, [isConnected, activeAddress, inputAddress]);
 
+  // Clear the data when the user disconnects or the address is empty
   useEffect(() => {
     if (!isConnected || activeAddress === '') {
       setSonicData(null);
@@ -106,6 +112,7 @@ export default function Home() {
     }
   }, [isConnected, inputAddress]);
 
+  // Set the active address
   useEffect(() => {
     if (inputAddress) {
       setActiveAddress(inputAddress);
@@ -115,6 +122,61 @@ export default function Home() {
       setActiveAddress('');
     }
   }, [inputAddress, address, isConnected]);
+
+  // Save the data in localStorage
+  useEffect(() => {
+    try {
+      if (sonicData && ringData && siloData) {
+        const date = getDate();
+        const dataObject = {
+          date: date,
+          sonicData: {
+            sonicPoints: sonicData.sonic_points.toFixed(1),
+            liquidityPoints: sonicData.passive_liquidity_points.toFixed(1),
+            activePoints: sonicData.active_liquidity_points.toFixed(1),
+            sonicRank: sonicData.rank,
+          },
+          ringData: {
+            ringPoints: ringData.total.slice(0, -36),
+          },
+          siloData: {
+            siloPoints: siloData.topAccounts[3].points.toFixed(0),
+            siloRank: siloData.topAccounts[3].position,
+          },
+        };
+        if (hasBeenMoreThan24Hours(date) || !localData) {
+          setLocalStorage('data', dataObject);
+          console.log('data saved in localStorage');
+        } else {
+          console.log(
+            'data not saved in localStorage because it has been less than 24 hours'
+          );
+        }
+      }
+    } catch (error) {
+      console.error('Error saving data in localStorage:', error);
+    }
+  }, [sonicData, ringData, siloData]);
+
+  // Get the data from localStorage
+  useEffect(() => {
+    try {
+      const data = getLocalStorage('data');
+      if (data) {
+        setLocalData(data);
+        console.log('data loaded from localStorage');
+      } else {
+        console.log('no data found in localStorage');
+      }
+    } catch (error) {
+      console.error('Error getting data from localStorage:', error);
+    }
+  }, []);
+
+  // Log the data from localStorage
+  useEffect(() => {
+    console.log(localData);
+  }, [localData]);
 
   return (
     <main className="container mx-auto flex max-w-[400px] flex-col items-center justify-center gap-8 rounded-lg border-2 border-gray-300 p-4">
@@ -156,6 +218,29 @@ export default function Home() {
         ) : (
           <CircleLoader color="orange" size={20} />
         )}
+        {localData && localData.sonicData ? (
+          <>
+            <p>
+              <strong>Last update:</strong> {formatDate(localData.date)}
+            </p>
+            <p>
+              <strong>Total Sonic Points:</strong>{' '}
+              {localData.sonicData.sonicPoints}
+            </p>
+            <p>
+              <strong>Liquidity points:</strong>{' '}
+              {localData.sonicData.liquidityPoints}
+            </p>
+            <p>
+              <strong>Active points:</strong> {localData.sonicData.activePoints}
+            </p>
+            <p>
+              <strong>Sonic rank:</strong> {localData.sonicData.sonicRank}
+            </p>
+          </>
+        ) : (
+          <CircleLoader color="orange" size={20} />
+        )}
       </section>
       <Separator />
       <section className="flex flex-col items-center justify-center gap-2">
@@ -166,6 +251,13 @@ export default function Home() {
         {ringData ? (
           <p>
             <strong>Ring Points:</strong> {ringPoints}
+          </p>
+        ) : (
+          <CircleLoader color="orange" size={20} />
+        )}
+        {localData && localData.ringData ? (
+          <p>
+            <strong>Ring Points:</strong> {localData.ringData.ringPoints}
           </p>
         ) : (
           <CircleLoader color="orange" size={20} />
@@ -186,6 +278,18 @@ export default function Home() {
             </p>
             <p>
               <strong>Silo rank:</strong> {siloRank}
+            </p>
+          </>
+        ) : (
+          <CircleLoader color="orange" size={20} />
+        )}
+        {localData && localData.siloData ? (
+          <>
+            <p>
+              <strong>Silo Points:</strong> {localData.siloData.siloPoints}
+            </p>
+            <p>
+              <strong>Silo rank:</strong> {localData.siloData.siloRank}
             </p>
           </>
         ) : (

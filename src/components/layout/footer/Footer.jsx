@@ -2,7 +2,7 @@
 
 export default function Footer() {
   return (
-    <footer className="container mx-auto flex max-w-[400px] flex-col items-center justify-center gap-2 rounded-lg border-2 border-gray-300 p-4">
+    <footer className="container mx-auto flex max-w-[400px] flex-col items-center justify-center gap-2 rounded-lg border-2 border-gray-300 p-4 text-center">
       <p>
         &copy; {new Date().getFullYear()} Sonic Points - Made by Phanty with ❤️
       </p>
