@@ -221,28 +221,39 @@ export default function Home() {
           <>
             <p>
               <strong>Total Sonic Points:</strong> {sonicPoints}{' '}
-              {DisplayDifference(
-                sonicData.sonic_points,
-                localData.sonicData.sonicPoints
-              )}
+              {localDataData &&
+                sonicData &&
+                DisplayDifference(
+                  sonicData.sonic_points,
+                  localData.sonicData.sonicPoints
+                )}
             </p>
             <p>
               <strong>Liquidity points:</strong> {liquidityPoints}{' '}
-              {DisplayDifference(
-                sonicData.passive_liquidity_points,
-                localData.sonicData.liquidityPoints
-              )}
+              {localData &&
+                sonicData &&
+                DisplayDifference(
+                  sonicData.passive_liquidity_points,
+                  localData.sonicData.liquidityPoints
+                )}
             </p>
             <p>
               <strong>Active points:</strong> {activePoints}{' '}
-              {DisplayDifference(
-                sonicData.active_liquidity_points,
-                localData.sonicData.activePoints
-              )}
+              {localData &&
+                sonicData &&
+                DisplayDifference(
+                  sonicData.active_liquidity_points,
+                  localData.sonicData.activePoints
+                )}
             </p>
             <p>
               <strong>Sonic rank:</strong> {sonicRank}
-              {DisplayDifference(sonicData.rank, localData.sonicData.sonicRank)}
+              {localData &&
+                sonicData &&
+                DisplayDifference(
+                  sonicData.rank,
+                  localData.sonicData.sonicRank
+                )}
             </p>
           </>
         ) : (
@@ -258,10 +269,12 @@ export default function Home() {
         {ringData ? (
           <p>
             <strong>Ring Points:</strong> {ringPoints}{' '}
-            {DisplayDifference(
-              ringData.total.slice(0, -36),
-              localData.ringData.ringPoints
-            )}
+            {localData &&
+              ringData &&
+              DisplayDifference(
+                ringData.total.slice(0, -36),
+                localData.ringData.ringPoints
+              )}
           </p>
         ) : (
           <CircleLoader color="orange" size={20} />
@@ -279,17 +292,21 @@ export default function Home() {
           <>
             <p>
               <strong>Silo Points:</strong> {siloPoints}{' '}
-              {DisplayDifference(
-                siloData.topAccounts[3].points,
-                localData.siloData.siloPoints
-              )}
+              {localData &&
+                siloData &&
+                DisplayDifference(
+                  siloData.topAccounts[3].points,
+                  localData.siloData.siloPoints
+                )}
             </p>
             <p>
               <strong>Silo rank:</strong> {siloRank}{' '}
-              {DisplayDifference(
-                siloData.topAccounts[3].position,
-                localData.siloData.siloRank
-              )}
+              {localData &&
+                siloData &&
+                DisplayDifference(
+                  siloData.topAccounts[3].position,
+                  localData.siloData.siloRank
+                )}
             </p>
           </>
         ) : (
