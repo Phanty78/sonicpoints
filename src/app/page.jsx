@@ -1,15 +1,16 @@
 'use client';
 
-import { useAccount } from '@/hooks/useAccount';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useEffect, useState } from 'react';
-import { Separator } from '@/components/ui/separator';
-import { Input } from '@/components/ui/input';
-import { getLocalStorage, setLocalStorage } from '@/utils/localStorage';
-import { getDate, hasBeenMoreThan24Hours, formatDate } from '@/utils/dates';
-import SonicSection from '@/components/sections/SonicSection';
 import RingSection from '@/components/sections/RingSection';
 import SiloSection from '@/components/sections/SiloSection';
+import SonicSection from '@/components/sections/SonicSection';
+import SwapXSection from '@/components/sections/SwapXSection';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import { useAccount } from '@/hooks/useAccount';
+import { getDate, hasBeenMoreThan24Hours } from '@/utils/dates';
+import { getLocalStorage, setLocalStorage } from '@/utils/localStorage';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -27,6 +28,8 @@ export default function Home() {
   const [inputAddress, setInputAddress] = useState('');
   const [activeAddress, setActiveAddress] = useState(address);
   const [localData, setLocalData] = useState(null);
+  const [swapxData, setSwapxData] = useState(null);
+  const [gemxAmount, setGemxAmount] = useState('');
 
   // Fetch the sonic data
   useEffect(() => {
@@ -98,6 +101,28 @@ export default function Home() {
     }
   }, [isConnected, activeAddress, inputAddress]);
 
+  // Fetch the swapx data
+  useEffect(() => {
+    async function fetchSwapxData() {
+      if (!activeAddress) return;
+      try {
+        const response = await fetch(`/api/swapx?address=${activeAddress}`);
+        if (!response.ok) {
+          throw new Error('Error fetching data');
+        }
+        const result = await response.json();
+        setSwapxData(result);
+        setGemxAmount(result.result);
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+
+    if (activeAddress) {
+      fetchSwapxData();
+    }
+  }, [isConnected, activeAddress, inputAddress]);
+
   // Clear the data when the user disconnects or the address is empty
   useEffect(() => {
     if (!isConnected || activeAddress === '') {
@@ -144,6 +169,9 @@ export default function Home() {
           siloData: {
             siloPoints: siloData.topAccounts[3].points.toFixed(0),
             siloRank: siloData.topAccounts[3].position,
+          },
+          swapxData: {
+            gemxAmount: swapxData.result,
           },
         };
         if (hasBeenMoreThan24Hours(date) || !localData) {
@@ -226,6 +254,14 @@ export default function Home() {
         localData={localData}
         siloPoints={siloPoints}
         siloRank={siloRank}
+      />
+
+      <Separator />
+
+      <SwapXSection
+        swapxData={swapxData}
+        localData={localData}
+        gemxAmount={gemxAmount}
       />
     </main>
   );

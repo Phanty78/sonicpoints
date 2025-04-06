@@ -52,6 +52,11 @@
     )
     0% 0% / 100% 100%;
   --ring-gradient: linear-gradient(98deg, #7a8fd9, #ac62e4);
+  --gemx-gradient: linear-gradient(
+    90deg,
+    rgb(188, 255, 47) 0%,
+    rgb(0, 255, 135) 100%
+  );
 }
 
 :root {
@@ -164,6 +169,13 @@
 
   .text-ring-gradient {
     background: var(--ring-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .text-gemx-gradient {
+    background: var(--gemx-gradient);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
