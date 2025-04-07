@@ -4,7 +4,7 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const address = searchParams.get('address');
-    const sonicApiKey = process.env.NEXT_PUBLIC_SONIC_API_KEY;
+    const sonicApiKey = process.env.SONIC_API_KEY;
     const GemXAddress = '0x05F0c7Ca7B90e3786603108D42cA8DFd28d72075';
 
     const RequestURL = `https://api.sonicscan.org/api?module=account&action=tokenbalance&contractaddress=${GemXAddress}&address=${address}&tag=latest&apikey=${sonicApiKey}`;
