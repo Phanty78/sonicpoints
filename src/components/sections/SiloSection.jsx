@@ -26,7 +26,8 @@ export default function SiloSection({
                 <TooltipTrigger>
                   {DisplayDifference(
                     siloData.topAccounts[3].points,
-                    localData.siloData.siloPoints
+                    localData.siloData.siloPoints,
+                    false
                   )}
                 </TooltipTrigger>
                 <TooltipContent>
@@ -42,7 +43,8 @@ export default function SiloSection({
                 <TooltipTrigger>
                   {DisplayDifference(
                     siloData.topAccounts[3].position,
-                    localData.siloData.siloRank
+                    localData.siloData.siloRank,
+                    true
                   )}
                 </TooltipTrigger>
                 <TooltipContent>

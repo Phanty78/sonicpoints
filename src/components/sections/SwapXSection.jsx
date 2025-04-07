@@ -18,7 +18,8 @@ export default function SwapXSection({ swapxData, localData, gemxAmount }) {
               <TooltipTrigger>
                 {DisplayDifference(
                   swapxData.result,
-                  localData.swapxData.gemxAmount
+                  localData.swapxData.gemxAmount,
+                  false
                 )}
               </TooltipTrigger>
               <TooltipContent>

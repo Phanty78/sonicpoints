@@ -18,7 +18,8 @@ export default function RingSection({ ringData, localData, ringPoints }) {
               <TooltipTrigger>
                 {DisplayDifference(
                   ringData.total.slice(0, -36),
-                  localData.ringData.ringPoints
+                  localData.ringData.ringPoints,
+                  false
                 )}
               </TooltipTrigger>
               <TooltipContent>
