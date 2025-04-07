@@ -203,21 +203,6 @@ export default function Home() {
     }
   }, []);
 
-  // Log the data from localStorage
-  useEffect(() => {
-    console.log(localData);
-  }, [localData]);
-
-  // Check GemX amount
-  useEffect(() => {
-    if (swapxData) {
-      console.log(swapxData);
-    }
-    if (gemxAmount) {
-      console.log(gemxAmount);
-    }
-  }, [swapxData, gemxAmount]);
-
   return (
     <main className="container mx-auto flex max-w-[400px] flex-col items-center justify-center gap-8 rounded-lg border-2 border-gray-300 p-4">
       <h2 className="text-sonic-gradient text-center text-2xl font-bold">
