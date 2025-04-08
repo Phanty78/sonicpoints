@@ -9,6 +9,14 @@ export function hasBeenMoreThan24Hours(previousDate, currentDate) {
   return currentDate - previousDate >= twentyFourHoursInMs;
 }
 
+// Fonction pour vérifier si 24h se sont écoulées
+export function hasBeenMoreThan24HoursForDb(lastDate) {
+  if (!lastDate) return true;
+  const now = new Date();
+  const diff = now - new Date(lastDate);
+  return diff >= 24 * 60 * 60 * 1000; // 24 heures en millisecondes
+}
+
 //Format the date
 export function formatDate(timestamp) {
   const date = new Date(timestamp);

@@ -17,7 +17,7 @@ export default function SiloSection({
           Silo Points
         </h3>
       </div>
-      {siloData && siloData.topAccounts && siloData.topAccounts[3] ? (
+      {siloData && siloData.data.topAccounts && siloData.data.topAccounts[3] ? (
         <>
           <p>
             <strong>Silo Points:</strong> {siloPoints}{' '}
@@ -25,7 +25,7 @@ export default function SiloSection({
               <Tooltip>
                 <TooltipTrigger>
                   {DisplayDifference(
-                    siloData.topAccounts[3].points,
+                    siloData.data.topAccounts[3].points,
                     localData.siloData.siloPoints,
                     false
                   )}
@@ -42,7 +42,7 @@ export default function SiloSection({
               <Tooltip>
                 <TooltipTrigger>
                   {DisplayDifference(
-                    siloData.topAccounts[3].position,
+                    siloData.data.topAccounts[3].position,
                     localData.siloData.siloRank,
                     true
                   )}
