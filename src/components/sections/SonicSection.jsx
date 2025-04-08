@@ -26,7 +26,7 @@ export default function SonicSection({
               <Tooltip>
                 <TooltipTrigger>
                   {DisplayDifference(
-                    sonicData.sonic_points,
+                    sonicData.data.sonic_points,
                     localData.sonicData.sonicPoints,
                     false
                   )}
@@ -43,7 +43,7 @@ export default function SonicSection({
               <Tooltip>
                 <TooltipTrigger>
                   {DisplayDifference(
-                    sonicData.passive_liquidity_points,
+                    sonicData.data.passive_liquidity_points,
                     localData.sonicData.liquidityPoints,
                     false
                   )}
@@ -60,7 +60,7 @@ export default function SonicSection({
               <Tooltip>
                 <TooltipTrigger>
                   {DisplayDifference(
-                    sonicData.active_liquidity_points,
+                    sonicData.data.active_liquidity_points,
                     localData.sonicData.activePoints,
                     false
                   )}
@@ -77,7 +77,7 @@ export default function SonicSection({
               <Tooltip>
                 <TooltipTrigger>
                   {DisplayDifference(
-                    sonicData.rank,
+                    sonicData.data.rank,
                     localData.sonicData.sonicRank,
                     true
                   )}

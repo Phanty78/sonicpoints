@@ -42,10 +42,10 @@ export default function Home() {
         }
         const result = await response.json();
         setSonicData(result);
-        setSonicPoints(result.sonic_points.toFixed(1));
-        setLiquidityPoints(result.passive_liquidity_points.toFixed(1));
-        setActivePoints(result.active_liquidity_points.toFixed(1));
-        setSonicRank(result.rank);
+        setSonicPoints(result.data.sonic_points.toFixed(1));
+        setLiquidityPoints(result.data.passive_liquidity_points.toFixed(1));
+        setActivePoints(result.data.active_liquidity_points.toFixed(1));
+        setSonicRank(result.data.rank);
       } catch (err) {
         setError(err.message);
       }
@@ -66,8 +66,8 @@ export default function Home() {
           throw new Error('Error fetching data');
         }
         const result = await response.json();
-        setRingData(result);
-        setRingPoints(result.total.slice(0, -36));
+        setRingData(result.data);
+        setRingPoints(result.data.total.slice(0, -36));
       } catch (err) {
         setError(err.message);
       }
@@ -89,8 +89,8 @@ export default function Home() {
         }
         const result = await response.json();
         setSiloData(result);
-        setSiloPoints(result.topAccounts[3].points.toFixed(0));
-        setSiloRank(result.topAccounts[3].position);
+        setSiloPoints(result.data.topAccounts[3].points.toFixed(0));
+        setSiloRank(result.data.topAccounts[3].position);
       } catch (err) {
         setError(err.message);
       }
@@ -111,8 +111,11 @@ export default function Home() {
           throw new Error('Error fetching data');
         }
         const result = await response.json();
-        setSwapxData(result);
-        setGemxAmount(result.result);
+        setSwapxData(result.data);
+        setGemxAmount(result.data.result.slice(0, -18));
+        if (gemxAmount < 1) {
+          setGemxAmount('0');
+        }
       } catch (err) {
         setError(err.message);
       }
@@ -158,29 +161,32 @@ export default function Home() {
         const dataObject = {
           date: date,
           sonicData: {
-            sonicPoints: sonicData.sonic_points.toFixed(1),
-            liquidityPoints: sonicData.passive_liquidity_points.toFixed(1),
-            activePoints: sonicData.active_liquidity_points.toFixed(1),
-            sonicRank: sonicData.rank,
+            sonicPoints: sonicData?.data?.sonic_points?.toFixed(1) || '0',
+            liquidityPoints:
+              sonicData?.data?.passive_liquidity_points?.toFixed(1) || '0',
+            activePoints:
+              sonicData?.data?.active_liquidity_points?.toFixed(1) || '0',
+            sonicRank: sonicData?.data?.rank || 0,
           },
           ringData: {
-            ringPoints: ringData.total.slice(0, -36),
+            ringPoints: ringData?.total?.slice(0, -36) || '0',
           },
           siloData: {
-            siloPoints: siloData.topAccounts[3].points.toFixed(0),
-            siloRank: siloData.topAccounts[3].position,
+            siloPoints:
+              siloData?.data?.topAccounts?.[3]?.points?.toFixed(0) || '0',
+            siloRank: siloData?.data?.topAccounts?.[3]?.position || 0,
           },
           swapxData: {
-            gemxAmount: swapxData.result,
+            gemxAmount: swapxData?.result || '0',
           },
         };
-        if (hasBeenMoreThan24Hours(date) || !localData) {
-          setLocalStorage('data', dataObject);
-          console.log('data saved in localStorage');
-        } else {
-          console.log(
-            'data not saved in localStorage because it has been less than 24 hours'
-          );
+        try {
+          if (hasBeenMoreThan24Hours(date) || !localData) {
+            setLocalStorage('data', dataObject);
+            console.log('data saved in localStorage');
+          }
+        } catch (error) {
+          console.error('Error saving data in localStorage:', error);
         }
       }
     } catch (error) {
@@ -261,3 +267,5 @@ export default function Home() {
     </main>
   );
 }
+
+// TODO: il y a un problème avec le silo, il ne sauvegarde pas les données dans le localStorage

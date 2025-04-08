@@ -110,8 +110,8 @@ const userSchema = new mongoose.Schema(
           },
         ],
       },
-      swapXData: {
-        gemXNumber: {
+      swapxData: {
+        swapxPoints: {
           type: Number,
           default: 0,
           min: 0,
@@ -122,7 +122,7 @@ const userSchema = new mongoose.Schema(
               type: Date,
               default: Date.now,
             },
-            gemXNumber: {
+            swapxPoints: {
               type: Number,
               default: 0,
             },
@@ -229,10 +229,10 @@ userSchema.methods.updateSiloRank = async function (rank) {
   return this.save();
 };
 
-userSchema.methods.updateGemXNumber = async function (number) {
-  this.data.swapXData.gemXNumber = number;
-  this.data.swapXData.history = manageHistory(this.data.swapXData.history, {
-    gemXNumber: number,
+userSchema.methods.updateSwapxPoints = async function (points) {
+  this.data.swapxData.swapxPoints = points;
+  this.data.swapxData.history = manageHistory(this.data.swapxData.history, {
+    swapxPoints: points,
   });
   this.data.date = new Date();
   return this.save();

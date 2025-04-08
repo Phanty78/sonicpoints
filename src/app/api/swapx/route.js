@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server';
+import connectDB from '@/lib/mongodb';
+import User from '@/models/userModel';
+import { hasBeenMoreThan24HoursForDb } from '@/utils/dates';
 
 export async function GET(request) {
   try {
@@ -9,24 +12,78 @@ export async function GET(request) {
 
     const RequestURL = `https://api.sonicscan.org/api?module=account&action=tokenbalance&contractaddress=${GemXAddress}&address=${address}&tag=latest&apikey=${sonicApiKey}`;
 
+    if (!address) {
+      return NextResponse.json(
+        { error: 'Address is required' },
+        { status: 400 }
+      );
+    }
+
+    await connectDB();
+
     const response = await fetch(RequestURL);
 
     if (!response.ok) {
       throw new Error(`API responded with status: ${response.status}`);
     }
 
-    const data = await response.json();
-    console.log('📦 Debug - API Response data:', data);
+    const swapxData = await response.json();
+    console.log(swapxData);
 
-    if (data.status === '0') {
-      console.log('❌ Error: API returned error status');
-      return NextResponse.json(
-        { error: data.message || 'API error' },
-        { status: 500 }
-      );
+    let user = await User.findOne({ address });
+
+    if (!user) {
+      user = new User({
+        address,
+        data: {
+          swapxData: {
+            swapxPoints: swapxData.result.slice(0, -18) || 0,
+            history: [
+              {
+                date: new Date(),
+                swapxPoints: swapxData.result.slice(0, -18) || 0,
+              },
+            ],
+          },
+        },
+      });
+    } else {
+      if (!user.data.swapxData) {
+        user.data.swapxData = {
+          swapxPoints: swapxData.result.slice(0, -18) || 0,
+          history: [
+            {
+              date: new Date(),
+              swapxPoints: swapxData.result.slice(0, -18) || 0,
+            },
+          ],
+        };
+      }
+
+      user.data.swapxData.swapxPoints = swapxData.result.slice(0, -18) || 0;
+      user.data.date = new Date();
+
+      const lastHistoryEntry =
+        user.data.swapxData.history[user.data.swapxData.history.length - 1];
+      if (hasBeenMoreThan24HoursForDb(lastHistoryEntry?.date)) {
+        user.data.swapxData.history.push({
+          date: new Date(),
+          swapxPoints: swapxData.result.slice(0, -18) || 0,
+        });
+      }
     }
 
-    return NextResponse.json(data);
+    await user.save();
+
+    return NextResponse.json({
+      success: true,
+      data: swapxData,
+      saved: true,
+      historyUpdated: hasBeenMoreThan24HoursForDb(
+        user.data.swapxData.history[user.data.swapxData.history.length - 1]
+          ?.date
+      ),
+    });
   } catch (error) {
     console.error('❌ Error in swapx route:', error);
     return NextResponse.json(
