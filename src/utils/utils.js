@@ -1,7 +1,11 @@
 export function DisplayDifference(data, localData, isRank) {
   if (!data || !localData) return null;
 
-  const difference = parseFloat(data) - parseFloat(localData);
+  let difference = parseFloat(data) - parseFloat(localData);
+
+  if (difference === null) {
+    difference = 0;
+  }
 
   if (isRank) {
     if (difference > 0) {
