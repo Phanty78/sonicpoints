@@ -16,10 +16,10 @@ export default function SwapXSection({ swapxData, localData, gemxAmount }) {
           {localData?.swapxData && swapxData?.result && (
             <Tooltip>
               <TooltipTrigger>
-                {console.log(swapxData.result, localData.swapxData.gemxAmount)}
+                {console.log(gemxAmount, localData.swapxData.gemxAmount)}
                 {DisplayDifference(
-                  swapxData.result.slice(0, -18),
-                  localData.swapxData.gemxAmount.slice(0, -18),
+                  gemxAmount,
+                  localData.swapxData.gemxAmount,
                   false
                 )}
               </TooltipTrigger>
@@ -35,5 +35,3 @@ export default function SwapXSection({ swapxData, localData, gemxAmount }) {
     </section>
   );
 }
-
-// TODO: Bug avec le fetch des data des GemX

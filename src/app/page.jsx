@@ -10,6 +10,7 @@ import { useAccount } from '@/hooks/useAccount';
 import { getDate, hasBeenMoreThan24Hours } from '@/utils/dates';
 import { getLocalStorage, setLocalStorage } from '@/utils/localStorage';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { use } from 'react';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
@@ -177,7 +178,7 @@ export default function Home() {
             siloRank: siloData?.data?.topAccounts?.[3]?.position || 0,
           },
           swapxData: {
-            gemxAmount: swapxData?.result || '0',
+            gemxAmount: swapxData?.result?.slice(0, -18) || '0',
           },
         };
         try {
