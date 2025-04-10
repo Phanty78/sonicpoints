@@ -71,6 +71,27 @@ export async function GET(request) {
         sonicData.active_liquidity_points.toFixed(1);
       user.data.sonicData.sonicRank = sonicData.rank;
       user.data.date = new Date();
+
+      // Vérifier si 24h se sont écoulées depuis la dernière entrée
+      const lastHistoryEntry =
+        user.data.sonicData.history[user.data.sonicData.history.length - 1];
+      if (hasBeenMoreThan24HoursForDb(lastHistoryEntry?.date)) {
+        // Créer une nouvelle entrée dans l'historique
+        const newHistoryEntry = {
+          date: new Date(),
+          sonicPoints: sonicData.sonic_points.toFixed(1),
+          liquidityPoints: sonicData.passive_liquidity_points.toFixed(1),
+          activePoints: sonicData.active_liquidity_points.toFixed(1),
+          sonicRank: sonicData.rank,
+        };
+
+        // Si l'historique atteint 30 entrées, supprimer la plus ancienne
+        if (user.data.sonicData.history.length >= 30) {
+          user.data.sonicData.history.shift(); // Supprime la première entrée
+        }
+
+        user.data.sonicData.history.push(newHistoryEntry);
+      }
     }
 
     await user.save();
@@ -78,6 +99,7 @@ export async function GET(request) {
     return NextResponse.json({
       success: true,
       data: sonicData,
+      history: user.data.sonicData.history,
       saved: true,
       historyUpdated: hasBeenMoreThan24HoursForDb(
         user.data.sonicData.history[user.data.sonicData.history.length - 1]

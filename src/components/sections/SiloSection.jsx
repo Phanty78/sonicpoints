@@ -2,12 +2,22 @@ import { DisplayDifference } from '@/utils/utils';
 import { CircleLoader } from 'react-spinners';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import Image from 'next/image';
-
+import { FaChartLine as FaChartLineIcon } from 'react-icons/fa';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { SiloHistoryChart } from '@/components/ui/charts/siloLineChart';
 export default function SiloSection({
   siloData,
   localData,
   siloPoints,
   siloRank,
+  siloHistory,
 }) {
   return (
     <section className="flex flex-col items-center justify-center gap-2">
@@ -53,6 +63,32 @@ export default function SiloSection({
               </Tooltip>
             )}
           </p>
+          <Dialog>
+            <DialogTrigger asChild>
+              <div className="cursor-pointer">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <FaChartLineIcon
+                      size={30}
+                      className="text-foreground mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Silo points graph</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Silo points graph</DialogTitle>
+                <DialogDescription>
+                  This graph shows the Silo points you have earned.
+                </DialogDescription>
+              </DialogHeader>
+              <SiloHistoryChart history={siloHistory} />
+            </DialogContent>
+          </Dialog>
         </>
       ) : (
         <CircleLoader color="orange" size={20} />

@@ -28,7 +28,6 @@ export async function GET(request) {
     }
 
     const swapxData = await response.json();
-    console.log(swapxData);
 
     let user = await User.findOne({ address });
 
@@ -66,10 +65,16 @@ export async function GET(request) {
       const lastHistoryEntry =
         user.data.swapxData.history[user.data.swapxData.history.length - 1];
       if (hasBeenMoreThan24HoursForDb(lastHistoryEntry?.date)) {
-        user.data.swapxData.history.push({
+        const newHistoryEntry = {
           date: new Date(),
           swapxPoints: swapxData.result.slice(0, -18) || 0,
-        });
+        };
+
+        if (user.data.swapxData.history.length >= 30) {
+          user.data.swapxData.history.shift();
+        }
+
+        user.data.swapxData.history.push(newHistoryEntry);
       }
     }
 
@@ -83,6 +88,7 @@ export async function GET(request) {
         user.data.swapxData.history[user.data.swapxData.history.length - 1]
           ?.date
       ),
+      swapxHistory: user.data.swapxData?.history || [],
     });
   } catch (error) {
     console.error('❌ Error in swapx route:', error);

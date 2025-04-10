@@ -56,10 +56,16 @@ export async function GET(request) {
       const lastHistoryEntry =
         user.data.ringData.history[user.data.ringData.history.length - 1];
       if (hasBeenMoreThan24HoursForDb(lastHistoryEntry?.date)) {
-        user.data.ringData.history.push({
+        const newHistoryEntry = {
           date: new Date(),
           ringPoints: ringData.total.slice(0, -36) || 0,
-        });
+        };
+
+        if (user.data.ringData.history.length >= 30) {
+          user.data.ringData.history.shift();
+        }
+
+        user.data.ringData.history.push(newHistoryEntry);
       }
     }
 
@@ -72,6 +78,7 @@ export async function GET(request) {
       historyUpdated: hasBeenMoreThan24HoursForDb(
         user.data.ringData.history[user.data.ringData.history.length - 1]?.date
       ),
+      ringHistory: user.data.ringData?.history || [],
     });
   } catch (error) {
     console.error('Error in ring route:', error);
