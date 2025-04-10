@@ -69,11 +69,18 @@ export async function GET(request) {
       const lastHistoryEntry =
         user.data.siloData.history[user.data.siloData.history.length - 1];
       if (hasBeenMoreThan24HoursForDb(lastHistoryEntry?.date)) {
-        user.data.siloData.history.push({
+        const newHistoryEntry = {
           date: new Date(),
           siloPoints: siloData.topAccounts[3].points.toFixed(1) || 0,
           siloRank: siloData.topAccounts[3].position || 0,
-        });
+        };
+
+        // Si l'historique atteint 30 entrées, supprimer la plus ancienne
+        if (user.data.siloData.history.length >= 30) {
+          user.data.siloData.history.shift();
+        }
+
+        user.data.siloData.history.push(newHistoryEntry);
       }
     }
 
@@ -84,6 +91,7 @@ export async function GET(request) {
       success: true,
       data: siloData,
       saved: true,
+      siloHistory: user.data.siloData?.history || [],
       historyUpdated: hasBeenMoreThan24HoursForDb(
         user.data.siloData.history[user.data.siloData.history.length - 1]?.date
       ),
@@ -96,5 +104,3 @@ export async function GET(request) {
     );
   }
 }
-
-//TODO - limiter l'historique à 30 jours

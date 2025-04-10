@@ -2,6 +2,16 @@ import Image from 'next/image';
 import { CircleLoader } from 'react-spinners';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { DisplayDifference } from '@/utils/utils';
+import { FaChartLine as FaChartLineIcon } from 'react-icons/fa';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { SonicHistoryChart } from '@/components/ui/charts/sonicLineChart';
 
 export default function SonicSection({
   sonicData,
@@ -10,6 +20,7 @@ export default function SonicSection({
   liquidityPoints,
   activePoints,
   sonicRank,
+  sonicHistory,
 }) {
   return (
     <section className="flex flex-col items-center justify-center gap-2">
@@ -88,6 +99,32 @@ export default function SonicSection({
               </Tooltip>
             )}
           </p>
+          <Dialog>
+            <DialogTrigger asChild>
+              <div className="cursor-pointer">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <FaChartLineIcon
+                      size={30}
+                      className="text-foreground mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Consolidated sonic points graph</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Sonic points graph</DialogTitle>
+                <DialogDescription>
+                  This graph shows the Sonic points you have earned.
+                </DialogDescription>
+              </DialogHeader>
+              <SonicHistoryChart history={sonicHistory} />
+            </DialogContent>
+          </Dialog>
         </>
       ) : (
         <CircleLoader color="orange" size={20} />

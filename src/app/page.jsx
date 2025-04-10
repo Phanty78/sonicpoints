@@ -10,12 +10,12 @@ import { useAccount } from '@/hooks/useAccount';
 import { getDate, hasBeenMoreThan24Hours } from '@/utils/dates';
 import { getLocalStorage, setLocalStorage } from '@/utils/localStorage';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { use } from 'react';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
   const { address, isConnected } = useAccount();
   const [sonicData, setSonicData] = useState(null);
+  const [sonicHistory, setSonicHistory] = useState(null);
   const [ringData, setRingData] = useState(null);
   const [siloData, setSiloData] = useState(null);
   const [error, setError] = useState(null);
@@ -31,6 +31,9 @@ export default function Home() {
   const [localData, setLocalData] = useState(null);
   const [swapxData, setSwapxData] = useState(null);
   const [gemxAmount, setGemxAmount] = useState('');
+  const [swapxHistory, setSwapxHistory] = useState(null);
+  const [ringHistory, setRingHistory] = useState(null);
+  const [siloHistory, setSiloHistory] = useState(null);
 
   // Fetch the sonic data
   useEffect(() => {
@@ -47,6 +50,7 @@ export default function Home() {
         setLiquidityPoints(result.data.passive_liquidity_points.toFixed(1));
         setActivePoints(result.data.active_liquidity_points.toFixed(1));
         setSonicRank(result.data.rank);
+        setSonicHistory(result.history);
       } catch (err) {
         setError(err.message);
       }
@@ -69,6 +73,7 @@ export default function Home() {
         const result = await response.json();
         setRingData(result.data);
         setRingPoints(result.data.total.slice(0, -36));
+        setRingHistory(result.ringHistory);
       } catch (err) {
         setError(err.message);
       }
@@ -90,8 +95,10 @@ export default function Home() {
         }
         const result = await response.json();
         setSiloData(result);
+        console.log('silo result', result);
         setSiloPoints(result.data.topAccounts[3].points.toFixed(0));
         setSiloRank(result.data.topAccounts[3].position);
+        setSiloHistory(result.siloHistory);
       } catch (err) {
         setError(err.message);
       }
@@ -112,8 +119,10 @@ export default function Home() {
           throw new Error('Error fetching data');
         }
         const result = await response.json();
+        console.log('swapx result', result);
         setSwapxData(result.data);
         setGemxAmount(result.data.result.slice(0, -18));
+        setSwapxHistory(result.swapxHistory);
         if (gemxAmount < 1) {
           setGemxAmount('0');
         }
@@ -126,6 +135,10 @@ export default function Home() {
       fetchSwapxData();
     }
   }, [isConnected, activeAddress, inputAddress]);
+
+  useEffect(() => {
+    console.log('swapx history', swapxHistory);
+  }, [swapxHistory]);
 
   // Clear the data when the user disconnects or the address is empty
   useEffect(() => {
@@ -239,6 +252,7 @@ export default function Home() {
         liquidityPoints={liquidityPoints}
         activePoints={activePoints}
         sonicRank={sonicRank}
+        sonicHistory={sonicHistory}
       />
 
       <Separator />
@@ -247,6 +261,7 @@ export default function Home() {
         ringData={ringData}
         localData={localData}
         ringPoints={ringPoints}
+        ringHistory={ringHistory}
       />
 
       <Separator />
@@ -256,6 +271,7 @@ export default function Home() {
         localData={localData}
         siloPoints={siloPoints}
         siloRank={siloRank}
+        siloHistory={siloHistory}
       />
 
       <Separator />
@@ -264,9 +280,8 @@ export default function Home() {
         swapxData={swapxData}
         localData={localData}
         gemxAmount={gemxAmount}
+        swapxHistory={swapxHistory}
       />
     </main>
   );
 }
-
-// TODO: il y a un problème avec le silo, il ne sauvegarde pas les données dans le localStorage
