@@ -33,18 +33,24 @@ export function SonicHistoryChart({ history }) {
             dataKey="sonicPoints"
             stroke="#8884d8"
             name="Sonic Points"
+            strokeWidth={3}
+            dot={{ r: 4 }}
           />
           <Line
             type="monotone"
             dataKey="liquidityPoints"
             stroke="#82ca9d"
             name="Liquidity Points"
+            strokeWidth={3}
+            dot={{ r: 4 }}
           />
           <Line
             type="monotone"
             dataKey="activePoints"
             stroke="#ffc658"
             name="Active Points"
+            strokeWidth={3}
+            dot={{ r: 4 }}
           />
         </LineChart>
       </ResponsiveContainer>

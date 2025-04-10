@@ -1,3 +1,4 @@
+// src/components/ui/charts/SonicRankHistoryChart.js
 import {
   LineChart,
   Line,
@@ -9,11 +10,11 @@ import {
   Legend,
 } from 'recharts';
 
-export function RingHistoryChart({ history }) {
+export function SonicRankHistoryChart({ history }) {
   // Formatage des données pour le graphique
   const chartData = history.map((item) => ({
     date: new Date(item.date).toLocaleDateString(),
-    ringPoints: item.ringPoints,
+    sonicRank: item.sonicRank,
   }));
 
   return (
@@ -27,9 +28,9 @@ export function RingHistoryChart({ history }) {
           <Legend />
           <Line
             type="monotone"
-            dataKey="ringPoints"
-            stroke="#82ca9d"
-            name="Ring Points"
+            dataKey="sonicRank"
+            stroke="#8884d8"
+            name="Sonic Rank"
             strokeWidth={3}
             dot={{ r: 4 }}
           />

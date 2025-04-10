@@ -33,6 +33,8 @@ export function SiloHistoryChart({ history }) {
             dataKey="siloPoints"
             stroke="#8884d8"
             name="Silo Points"
+            strokeWidth={3}
+            dot={{ r: 4 }}
           />
           <Line
             yAxisId="right"
@@ -40,6 +42,8 @@ export function SiloHistoryChart({ history }) {
             dataKey="siloRank"
             stroke="#ff7300"
             name="Silo Rank"
+            strokeWidth={3}
+            dot={{ r: 4 }}
           />
         </LineChart>
       </ResponsiveContainer>
