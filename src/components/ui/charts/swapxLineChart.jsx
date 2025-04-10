@@ -30,7 +30,7 @@ export function SwapxHistoryChart({ history }) {
             dataKey="swapxPoints"
             stroke="#ffc658"
             name="SwapX Points"
-            strokeWidth={2}
+            strokeWidth={3}
             dot={{ r: 4 }}
           />
         </LineChart>

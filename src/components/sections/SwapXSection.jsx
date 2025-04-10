@@ -49,10 +49,25 @@ export default function SwapXSection({
               <div className="cursor-pointer">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <FaChartLineIcon
-                      size={30}
-                      className="text-foreground mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
-                    />
+                    <div className="relative">
+                      <svg width="0" height="0">
+                        <linearGradient
+                          id="gemx-gradient"
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="0%"
+                        >
+                          <stop offset="0%" stopColor="rgb(188, 255, 47)" />
+                          <stop offset="100%" stopColor="rgb(0, 255, 135)" />
+                        </linearGradient>
+                      </svg>
+                      <FaChartLineIcon
+                        size={30}
+                        className="mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
+                        style={{ fill: 'url(#gemx-gradient)' }}
+                      />
+                    </div>
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>SwapX points graph</p>

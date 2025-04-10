@@ -49,10 +49,25 @@ export default function RingSection({
               <div className="cursor-pointer">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <FaChartLineIcon
-                      size={30}
-                      className="text-foreground mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
-                    />
+                    <div className="relative">
+                      <svg width="0" height="0">
+                        <linearGradient
+                          id="ring-gradient"
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="100%"
+                        >
+                          <stop offset="0%" stopColor="#7a8fd9" />
+                          <stop offset="100%" stopColor="#ac62e4" />
+                        </linearGradient>
+                      </svg>
+                      <FaChartLineIcon
+                        size={30}
+                        className="mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
+                        style={{ fill: 'url(#ring-gradient)' }}
+                      />
+                    </div>
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Ring points graph</p>
