@@ -15,50 +15,55 @@ import { FaChartLine as FaChartLineIcon } from 'react-icons/fa';
 import { SPT_MIN_NUMBER } from '@/constants/constants';
 import { useEffect, useState } from 'react';
 
-export default function SwapXSection({
-  swapxData,
+export default function BeetsSection({
+  beetsData,
   localData,
-  gemxAmount,
-  swapxHistory,
+  beetsAmount,
+  beetsHistory,
   sptToken,
   priceData,
 }) {
-  const [gemxAmountInUSD, setGemxAmountInUSD] = useState(0);
+  const [beetsAmountInUSD, setBeetsAmountInUSD] = useState(0);
 
   useEffect(() => {
-    if (priceData && priceData[1]) {
-      setGemxAmountInUSD(priceData[1].estimatedPrice * gemxAmount);
+    if (priceData && priceData[0]) {
+      setBeetsAmountInUSD(priceData[0].estimatedPrice * beetsAmount);
     }
-  }, [priceData, gemxAmount]);
+  }, [priceData, beetsAmount]);
   return (
     <section className="flex flex-col items-center justify-center gap-2">
       <div className="flex items-center justify-center gap-2">
-        <Image src="/images/gemx.png" alt="GemX" width={20} height={20} />
-        <h3 className="text-gemx-gradient text-xl font-bold">GemX Amount</h3>
+        <Image
+          src="/images/beets.png"
+          alt="Beets logo"
+          width={20}
+          height={20}
+        />
+        <h3 className="text-beets-gradient text-xl font-bold">Beets Amount</h3>
       </div>
-      {swapxData ? (
+      {beetsData ? (
         <>
           <div className="flex items-center justify-between gap-4">
             <p>
-              <strong>GemX Amount:</strong> {gemxAmount}{' '}
-              {localData?.swapxData && swapxData?.result && (
+              <strong>Beets Amount:</strong> {beetsAmount}{' '}
+              {localData?.beetsData && beetsData?.result && (
                 <Tooltip>
                   <TooltipTrigger>
                     {DisplayDifference(
-                      gemxAmount,
-                      localData.swapxData.gemxAmount,
+                      beetsAmount,
+                      localData.beetsData.beetsAmount,
                       false
                     )}
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>GemX amount difference since last update</p>
+                    <p>Beets amount difference since last update</p>
                   </TooltipContent>
                 </Tooltip>
               )}
             </p>
-            {gemxAmountInUSD > 0 ? (
+            {sptToken >= SPT_MIN_NUMBER ? (
               <p className="dark:text-foreground text-base font-bold">
-                ≃ {gemxAmountInUSD.toFixed(2)} $
+                ≃ {beetsAmountInUSD.toFixed(2)} $
               </p>
             ) : (
               <p className="dark:text-foreground text-base font-bold">
@@ -72,41 +77,26 @@ export default function SwapXSection({
                 <div className="cursor-pointer">
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div className="relative">
-                        <svg width="0" height="0">
-                          <linearGradient
-                            id="gemx-gradient"
-                            x1="0%"
-                            y1="0%"
-                            x2="100%"
-                            y2="0%"
-                          >
-                            <stop offset="0%" stopColor="rgb(188, 255, 47)" />
-                            <stop offset="100%" stopColor="rgb(0, 255, 135)" />
-                          </linearGradient>
-                        </svg>
-                        <FaChartLineIcon
-                          size={30}
-                          className="mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
-                          style={{ fill: 'url(#gemx-gradient)' }}
-                        />
-                      </div>
+                      <FaChartLineIcon
+                        size={30}
+                        className="text-foreground mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
+                      />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>SwapX points graph</p>
+                      <p>Beets amount graph</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>GemX amount graph</DialogTitle>
+                  <DialogTitle>Beets amount graph</DialogTitle>
                   <DialogDescription>
-                    This graph shows the GemX amount you have earned from SwapX
+                    This graph shows the Beets amount you have earned from Beets
                     LP.
                   </DialogDescription>
                 </DialogHeader>
-                <SwapxHistoryChart history={swapxHistory} />
+                <SwapxHistoryChart history={beetsHistory} />
               </DialogContent>
             </Dialog>
           ) : (

@@ -12,12 +12,15 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { RingHistoryChart } from '@/components/ui/charts/ringLineChart';
+import { SPT_MIN_NUMBER } from '@/constants/constants';
 
 export default function RingSection({
   ringData,
   localData,
   ringPoints,
   ringHistory,
+  sptToken,
+  priceData,
 }) {
   return (
     <section className="flex flex-col items-center justify-center gap-2">
@@ -46,34 +49,46 @@ export default function RingSection({
           </p>
           <Dialog>
             <DialogTrigger asChild>
-              <div className="cursor-pointer">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className="relative">
-                      <svg width="0" height="0">
-                        <linearGradient
-                          id="ring-gradient"
-                          x1="0%"
-                          y1="0%"
-                          x2="100%"
-                          y2="100%"
-                        >
-                          <stop offset="0%" stopColor="#7a8fd9" />
-                          <stop offset="100%" stopColor="#ac62e4" />
-                        </linearGradient>
-                      </svg>
-                      <FaChartLineIcon
-                        size={30}
-                        className="mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
-                        style={{ fill: 'url(#ring-gradient)' }}
-                      />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Ring points graph</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
+              {sptToken >= SPT_MIN_NUMBER ? (
+                <div className="cursor-pointer">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="group relative">
+                        <svg width="0" height="0">
+                          <linearGradient
+                            id="ring-gradient"
+                            x1="0%"
+                            y1="0%"
+                            x2="100%"
+                            y2="100%"
+                          >
+                            <stop offset="0%" stopColor="#7a8fd9" />
+                            <stop offset="100%" stopColor="#ac62e4" />
+                          </linearGradient>
+                        </svg>
+                        <FaChartLineIcon
+                          size={30}
+                          className="mt-2 transition-all duration-300 group-hover:scale-110"
+                          style={{ fill: 'url(#ring-gradient)' }}
+                        />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      className="bg-slate-800 text-white"
+                    >
+                      <p>Voir l'historique des Ring Points</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              ) : (
+                <div className="pointer-events-none cursor-not-allowed opacity-50">
+                  <FaChartLineIcon
+                    size={30}
+                    className="text-foreground mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
+                  />
+                </div>
+              )}
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>

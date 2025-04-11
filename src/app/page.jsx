@@ -4,6 +4,7 @@ import RingSection from '@/components/sections/RingSection';
 import SiloSection from '@/components/sections/SiloSection';
 import SonicSection from '@/components/sections/SonicSection';
 import SwapXSection from '@/components/sections/SwapXSection';
+import BeetsSection from '@/components/sections/BeetsSection';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { useAccount } from '@/hooks/useAccount';
@@ -11,6 +12,7 @@ import { getDate, hasBeenMoreThan24Hours } from '@/utils/dates';
 import { getLocalStorage, setLocalStorage } from '@/utils/localStorage';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useEffect, useState } from 'react';
+import { SPT_MIN_NUMBER } from '@/constants/constants';
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -34,6 +36,12 @@ export default function Home() {
   const [swapxHistory, setSwapxHistory] = useState(null);
   const [ringHistory, setRingHistory] = useState(null);
   const [siloHistory, setSiloHistory] = useState(null);
+  const [sptToken, setSptToken] = useState('');
+  const [sptData, setSptData] = useState(null);
+  const [priceData, setPriceData] = useState(null);
+  const [beetsData, setBeetsData] = useState(null);
+  const [beetsAmount, setBeetsAmount] = useState('');
+  const [beetsHistory, setBeetsHistory] = useState(null);
 
   // Fetch the sonic data
   useEffect(() => {
@@ -130,6 +138,57 @@ export default function Home() {
       fetchSwapxData();
     }
   }, [isConnected, activeAddress, inputAddress]);
+
+  // Fetch the beets data
+  useEffect(() => {
+    async function fetchBeetsData() {
+      if (!activeAddress) return;
+      try {
+        const response = await fetch(`/api/beets?address=${activeAddress}`);
+        if (!response.ok) {
+          throw new Error('Error fetching data');
+        }
+        const result = await response.json();
+        setBeetsData(result.data);
+        setBeetsAmount((result.data.result.slice(0, -17) / 10).toString());
+        setBeetsHistory(result.beetsHistory);
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+
+    if (activeAddress) {
+      fetchBeetsData();
+    }
+  }, [isConnected, activeAddress, inputAddress]);
+
+  // Fetch the spt data
+  useEffect(() => {
+    async function fetchSptData() {
+      if (!activeAddress) return;
+      try {
+        const response = await fetch(`/api/spt?address=${activeAddress}`);
+        if (!response.ok) {
+          throw new Error('Error fetching data');
+        }
+        const result = await response.json();
+        setSptToken((result.data.result.slice(0, -17) / 10).toString());
+        setSptData(result.data);
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+
+    if (activeAddress) {
+      fetchSptData();
+    }
+  }, [isConnected, activeAddress, inputAddress]);
+
+  useEffect(() => {
+    console.log(sptToken);
+  }, [sptToken]);
+
+  //TODO : le montant de token n'est pas correctement remonté
 
   // Clear the data when the user disconnects or the address is empty
   useEffect(() => {
@@ -231,7 +290,15 @@ export default function Home() {
           value={inputAddress}
           onChange={(e) => setInputAddress(e.target.value)}
         />
-        {error && <p>Error: {error}</p>}
+        {sptToken < SPT_MIN_NUMBER ? (
+          <p className="mt-2 text-sm text-red-500">
+            You need at least {SPT_MIN_NUMBER} SPT to see the graph
+          </p>
+        ) : (
+          <p className="mt-2 text-sm text-green-500">
+            You have at least {SPT_MIN_NUMBER} SPT, enjoy all features !
+          </p>
+        )}
       </section>
 
       <Separator />
@@ -244,6 +311,8 @@ export default function Home() {
         activePoints={activePoints}
         sonicRank={sonicRank}
         sonicHistory={sonicHistory}
+        sptToken={sptToken}
+        priceData={priceData}
       />
 
       <Separator />
@@ -253,6 +322,8 @@ export default function Home() {
         localData={localData}
         ringPoints={ringPoints}
         ringHistory={ringHistory}
+        sptToken={sptToken}
+        priceData={priceData}
       />
 
       <Separator />
@@ -263,6 +334,8 @@ export default function Home() {
         siloPoints={siloPoints}
         siloRank={siloRank}
         siloHistory={siloHistory}
+        sptToken={sptToken}
+        priceData={priceData}
       />
 
       <Separator />
@@ -272,6 +345,19 @@ export default function Home() {
         localData={localData}
         gemxAmount={gemxAmount}
         swapxHistory={swapxHistory}
+        sptToken={sptToken}
+        priceData={priceData}
+      />
+
+      <Separator />
+
+      <BeetsSection
+        beetsData={beetsData}
+        localData={localData}
+        beetsAmount={beetsAmount}
+        beetsHistory={beetsHistory}
+        sptToken={sptToken}
+        priceData={priceData}
       />
     </main>
   );

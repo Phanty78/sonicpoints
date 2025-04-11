@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema(
       unique: true,
       index: true,
     },
+    role: {
+      type: String,
+      default: 'user',
+    },
     connectionCounter: {
       type: Number,
       default: 0,
@@ -129,6 +133,32 @@ const userSchema = new mongoose.Schema(
           },
         ],
       },
+      beetsData: {
+        beetsPoints: {
+          type: Number,
+          default: 0,
+          min: 0,
+        },
+        history: [
+          {
+            date: {
+              type: Date,
+              default: Date.now,
+            },
+            beetsPoints: {
+              type: Number,
+              default: 0,
+            },
+          },
+        ],
+      },
+    },
+    sptData: {
+      spToken: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
     },
   },
   {
@@ -234,6 +264,21 @@ userSchema.methods.updateSwapxPoints = async function (points) {
   this.data.swapxData.history = manageHistory(this.data.swapxData.history, {
     swapxPoints: points,
   });
+  this.data.date = new Date();
+  return this.save();
+};
+
+userSchema.methods.updateBeetsPoints = async function (points) {
+  this.data.beetsData.beetsPoints = points;
+  this.data.beetsData.history = manageHistory(this.data.beetsData.history, {
+    beetsPoints: points,
+  });
+  this.data.date = new Date();
+  return this.save();
+};
+
+userSchema.methods.updateSPToken = async function (tokenBalance) {
+  this.data.sptData.spToken = tokenBalance;
   this.data.date = new Date();
   return this.save();
 };

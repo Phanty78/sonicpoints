@@ -14,6 +14,7 @@ import {
 import { SonicHistoryChart } from '@/components/ui/charts/sonicLineChart';
 import { SonicRankHistoryChart } from '@/components/ui/charts/sonicRankLineChart';
 import { Separator } from '@/components/ui/separator';
+import { SPT_MIN_NUMBER } from '@/constants/constants';
 
 export default function SonicSection({
   sonicData,
@@ -23,6 +24,7 @@ export default function SonicSection({
   activePoints,
   sonicRank,
   sonicHistory,
+  sptToken,
 }) {
   return (
     <section className="flex flex-col items-center justify-center gap-2">
@@ -102,123 +104,143 @@ export default function SonicSection({
             )}
           </p>
           <div className="flex items-center justify-center gap-4">
-            <Dialog>
-              <DialogTrigger asChild>
-                <div className="cursor-pointer">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="flex items-center justify-center gap-1">
-                        <div className="relative">
-                          <svg width="0" height="0">
-                            <linearGradient
-                              id="sonic-gradient"
-                              x1="0%"
-                              y1="0%"
-                              x2="100%"
-                              y2="100%"
-                            >
-                              <stop
-                                offset="0%"
-                                stopColor="rgb(255, 203, 103)"
-                              />
-                              <stop
-                                offset="34.85%"
-                                stopColor="rgb(237, 84, 9)"
-                              />
-                              <stop
-                                offset="63.64%"
-                                stopColor="rgb(80, 97, 121)"
-                              />
-                              <stop
-                                offset="83.85%"
-                                stopColor="rgb(33, 78, 129)"
-                              />
-                            </linearGradient>
-                          </svg>
-                          <FaChartLineIcon
-                            size={30}
-                            className="mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
-                            style={{ fill: 'url(#sonic-gradient)' }}
-                          />
+            {sptToken >= SPT_MIN_NUMBER ? (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <div className="cursor-pointer">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="flex items-center justify-center gap-1">
+                          <div className="relative">
+                            <svg width="0" height="0">
+                              <linearGradient
+                                id="sonic-gradient"
+                                x1="0%"
+                                y1="0%"
+                                x2="100%"
+                                y2="100%"
+                              >
+                                <stop
+                                  offset="0%"
+                                  stopColor="rgb(255, 203, 103)"
+                                />
+                                <stop
+                                  offset="34.85%"
+                                  stopColor="rgb(237, 84, 9)"
+                                />
+                                <stop
+                                  offset="63.64%"
+                                  stopColor="rgb(80, 97, 121)"
+                                />
+                                <stop
+                                  offset="83.85%"
+                                  stopColor="rgb(33, 78, 129)"
+                                />
+                              </linearGradient>
+                            </svg>
+                            <FaChartLineIcon
+                              size={30}
+                              className="mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
+                              style={{ fill: 'url(#sonic-gradient)' }}
+                            />
+                          </div>
+                          <p className="text-sonic-gradient text-base">
+                            Points
+                          </p>
                         </div>
-                        <p className="text-sonic-gradient text-base">Points</p>
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Consolidated sonic points graph</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Sonic points graph</DialogTitle>
-                  <DialogDescription>
-                    This graph shows the Sonic points you have earned.
-                  </DialogDescription>
-                </DialogHeader>
-                <SonicHistoryChart history={sonicHistory} />
-              </DialogContent>
-            </Dialog>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Consolidated sonic points graph</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Sonic points graph</DialogTitle>
+                    <DialogDescription>
+                      This graph shows the Sonic points you have earned.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <SonicHistoryChart history={sonicHistory} />
+                </DialogContent>
+              </Dialog>
+            ) : (
+              <div className="pointer-events-none cursor-not-allowed opacity-50">
+                <FaChartLineIcon
+                  size={30}
+                  className="mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
+                />
+              </div>
+            )}
             <Separator orientation="vertical" className="h-full" />
-            <Dialog>
-              <DialogTrigger asChild>
-                <div className="cursor-pointer">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="flex items-center justify-center gap-1">
-                        <div className="relative">
-                          <svg width="0" height="0">
-                            <linearGradient
-                              id="sonic-gradient"
-                              x1="0%"
-                              y1="0%"
-                              x2="100%"
-                              y2="100%"
-                            >
-                              <stop
-                                offset="0%"
-                                stopColor="rgb(255, 203, 103)"
-                              />
-                              <stop
-                                offset="34.85%"
-                                stopColor="rgb(237, 84, 9)"
-                              />
-                              <stop
-                                offset="63.64%"
-                                stopColor="rgb(80, 97, 121)"
-                              />
-                              <stop
-                                offset="83.85%"
-                                stopColor="rgb(33, 78, 129)"
-                              />
-                            </linearGradient>
-                          </svg>
-                          <FaChartLineIcon
-                            size={30}
-                            className="mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
-                            style={{ fill: 'url(#sonic-gradient)' }}
-                          />
+            {sptToken >= SPT_MIN_NUMBER ? (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <div className="cursor-pointer">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="flex items-center justify-center gap-1">
+                          <div className="relative">
+                            <svg width="0" height="0">
+                              <linearGradient
+                                id="sonic-gradient"
+                                x1="0%"
+                                y1="0%"
+                                x2="100%"
+                                y2="100%"
+                              >
+                                <stop
+                                  offset="0%"
+                                  stopColor="rgb(255, 203, 103)"
+                                />
+                                <stop
+                                  offset="34.85%"
+                                  stopColor="rgb(237, 84, 9)"
+                                />
+                                <stop
+                                  offset="63.64%"
+                                  stopColor="rgb(80, 97, 121)"
+                                />
+                                <stop
+                                  offset="83.85%"
+                                  stopColor="rgb(33, 78, 129)"
+                                />
+                              </linearGradient>
+                            </svg>
+                            <FaChartLineIcon
+                              size={30}
+                              className="mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
+                              style={{ fill: 'url(#sonic-gradient)' }}
+                            />
+                          </div>
+                          <p className="text-sonic-gradient text-base">Rank</p>
                         </div>
-                        <p className="text-sonic-gradient text-base">Rank</p>
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Consolidated sonic rank graph</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Sonic rank graph</DialogTitle>
-                  <DialogDescription>
-                    This graph shows the Sonic rank you have earned.
-                  </DialogDescription>
-                </DialogHeader>
-                <SonicRankHistoryChart history={sonicHistory} />
-              </DialogContent>
-            </Dialog>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Consolidated sonic rank graph</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Sonic rank graph</DialogTitle>
+                    <DialogDescription>
+                      This graph shows the Sonic rank you have earned.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <SonicRankHistoryChart history={sonicHistory} />
+                </DialogContent>
+              </Dialog>
+            ) : (
+              <div className="pointer-events-none cursor-not-allowed opacity-50">
+                <FaChartLineIcon
+                  size={30}
+                  className="mt-2 cursor-pointer transition-all duration-300 hover:scale-110"
+                />
+              </div>
+            )}
           </div>
         </>
       ) : (

@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
+import { BEETS_FRAGMENT_S1 } from '@/constants/constants';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/userModel';
 import { hasBeenMoreThan24HoursForDb } from '@/utils/dates';
-import { GEMSX_ADDRESS } from '@/constants/constants';
 
 export async function GET(request) {
   try {
@@ -10,7 +10,7 @@ export async function GET(request) {
     const address = searchParams.get('address');
     const sonicApiKey = process.env.SONIC_API_KEY;
 
-    const RequestURL = `https://api.sonicscan.org/api?module=account&action=tokenbalance&contractaddress=${GEMSX_ADDRESS}&address=${address}&tag=latest&apikey=${sonicApiKey}`;
+    const RequestURL = `https://api.sonicscan.org/api?module=account&action=tokenbalance&contractaddress=${BEETS_FRAGMENT_S1}&address=${address}&tag=latest&apikey=${sonicApiKey}`;
 
     if (!address) {
       return NextResponse.json(
@@ -27,7 +27,7 @@ export async function GET(request) {
       throw new Error(`API responded with status: ${response.status}`);
     }
 
-    const swapxData = await response.json();
+    const beetsData = await response.json();
 
     let user = await User.findOne({ address });
 
@@ -35,12 +35,12 @@ export async function GET(request) {
       user = new User({
         address,
         data: {
-          swapxData: {
-            swapxPoints: swapxData.result.slice(0, -18) || 0,
+          beetsData: {
+            beetsPoints: beetsData.result.slice(0, -17).toString() || 0,
             history: [
               {
                 date: new Date(),
-                swapxPoints: swapxData.result.slice(0, -18) || 0,
+                beetsPoints: beetsData.result.slice(0, -17).toString() || 0,
               },
             ],
           },
@@ -48,33 +48,34 @@ export async function GET(request) {
       });
     } else {
       if (!user.data.swapxData) {
-        user.data.swapxData = {
-          swapxPoints: swapxData.result.slice(0, -18) || 0,
+        user.data.beetsData = {
+          beetsPoints: beetsData.result.slice(0, -17).toString() || 0,
           history: [
             {
               date: new Date(),
-              swapxPoints: swapxData.result.slice(0, -18) || 0,
+              beetsPoints: beetsData.result.slice(0, -17).toString() || 0,
             },
           ],
         };
       }
 
-      user.data.swapxData.swapxPoints = swapxData.result.slice(0, -18) || 0;
+      user.data.beetsData.beetsPoints =
+        beetsData.result.slice(0, -17).toString() || 0;
       user.data.date = new Date();
 
       const lastHistoryEntry =
-        user.data.swapxData.history[user.data.swapxData.history.length - 1];
+        user.data.beetsData.history[user.data.beetsData.history.length - 1];
       if (hasBeenMoreThan24HoursForDb(lastHistoryEntry?.date)) {
         const newHistoryEntry = {
           date: new Date(),
-          swapxPoints: swapxData.result.slice(0, -18) || 0,
+          beetsPoints: beetsData.result.slice(0, -17).toString() || 0,
         };
 
-        if (user.data.swapxData.history.length >= 30) {
-          user.data.swapxData.history.shift();
+        if (user.data.beetsData.history.length >= 30) {
+          user.data.beetsData.history.shift();
         }
 
-        user.data.swapxData.history.push(newHistoryEntry);
+        user.data.beetsData.history.push(newHistoryEntry);
       }
     }
 
@@ -82,16 +83,16 @@ export async function GET(request) {
 
     return NextResponse.json({
       success: true,
-      data: swapxData,
+      data: beetsData,
       saved: true,
       historyUpdated: hasBeenMoreThan24HoursForDb(
-        user.data.swapxData.history[user.data.swapxData.history.length - 1]
+        user.data.beetsData.history[user.data.beetsData.history.length - 1]
           ?.date
       ),
-      swapxHistory: user.data.swapxData?.history || [],
+      beetsHistory: user.data.beetsData?.history || [],
     });
   } catch (error) {
-    console.error('❌ Error in swapx route:', error);
+    console.error('❌ Error in beets route:', error);
     return NextResponse.json(
       { error: 'Internal server error', details: error.message },
       { status: 500 }
