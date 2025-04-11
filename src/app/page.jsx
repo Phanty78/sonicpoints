@@ -121,11 +121,8 @@ export default function Home() {
         const result = await response.json();
         console.log('swapx result', result);
         setSwapxData(result.data);
-        setGemxAmount(result.data.result.slice(0, -18));
+        setGemxAmount((result.data.result.slice(0, -17) / 10).toString());
         setSwapxHistory(result.swapxHistory);
-        if (gemxAmount < 1) {
-          setGemxAmount('0');
-        }
       } catch (err) {
         setError(err.message);
       }
@@ -135,10 +132,6 @@ export default function Home() {
       fetchSwapxData();
     }
   }, [isConnected, activeAddress, inputAddress]);
-
-  useEffect(() => {
-    console.log('swapx history', swapxHistory);
-  }, [swapxHistory]);
 
   // Clear the data when the user disconnects or the address is empty
   useEffect(() => {
