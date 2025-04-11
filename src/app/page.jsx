@@ -95,7 +95,6 @@ export default function Home() {
         }
         const result = await response.json();
         setSiloData(result);
-        console.log('silo result', result);
         setSiloPoints(result.data.topAccounts[3].points.toFixed(0));
         setSiloRank(result.data.topAccounts[3].position);
         setSiloHistory(result.siloHistory);
@@ -119,7 +118,6 @@ export default function Home() {
           throw new Error('Error fetching data');
         }
         const result = await response.json();
-        console.log('swapx result', result);
         setSwapxData(result.data);
         setGemxAmount((result.data.result.slice(0, -17) / 10).toString());
         setSwapxHistory(result.swapxHistory);
