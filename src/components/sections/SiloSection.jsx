@@ -64,16 +64,7 @@ export default function SiloSection({
             </p>
             {sptToken >= SPT_MIN_NUMBER ? (
               <p className="dark:text-foreground text-base font-bold">
-                {siloData && priceData && (
-                  <Tooltip>
-                    <TooltipTrigger>
-                      ≃ {siloPointsInUSD.toFixed(2)} $
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Estimated Silo points in USD</p>
-                    </TooltipContent>
-                  </Tooltip>
-                )}
+                ≃ {siloPointsInUSD.toFixed(2)} $
               </p>
             ) : (
               <p className="dark:text-foreground text-base font-bold">

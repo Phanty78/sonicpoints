@@ -5,6 +5,8 @@ import SiloSection from '@/components/sections/SiloSection';
 import SonicSection from '@/components/sections/SonicSection';
 import SwapXSection from '@/components/sections/SwapXSection';
 import BeetsSection from '@/components/sections/BeetsSection';
+import ShadowSection from '@/components/sections/ShadowSection';
+import BuyButton from '@/components/ui/BuyButton';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { useAccount } from '@/hooks/useAccount';
@@ -42,6 +44,9 @@ export default function Home() {
   const [beetsData, setBeetsData] = useState(null);
   const [beetsAmount, setBeetsAmount] = useState('');
   const [beetsHistory, setBeetsHistory] = useState(null);
+  const [shadowData, setShadowData] = useState(null);
+  const [shadowHistory, setShadowHistory] = useState(null);
+  const [shadowPoints, setShadowPoints] = useState('');
 
   // Fetch the sonic data
   useEffect(() => {
@@ -162,6 +167,29 @@ export default function Home() {
     }
   }, [isConnected, activeAddress, inputAddress]);
 
+  // Fetch the shadow data
+  useEffect(() => {
+    async function fetchShadowData() {
+      if (!activeAddress) return;
+      try {
+        const response = await fetch(`/api/shadow?address=${activeAddress}`);
+        if (!response.ok) {
+          throw new Error('Error fetching data');
+        }
+        const result = await response.json();
+        setShadowData(result.data);
+        setShadowPoints(result.data.shadowPoints.toFixed(0));
+        setShadowHistory(result.shadowHistory);
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+
+    if (activeAddress) {
+      fetchShadowData();
+    }
+  }, [isConnected, activeAddress, inputAddress]);
+
   // Fetch the spt data
   useEffect(() => {
     async function fetchSptData() {
@@ -184,11 +212,20 @@ export default function Home() {
     }
   }, [isConnected, activeAddress, inputAddress]);
 
+  // Fetch the price data
   useEffect(() => {
-    console.log(sptToken);
-  }, [sptToken]);
+    try {
+      async function fetchPriceData() {
+        const response = await fetch('/api/price');
+        const result = await response.json();
+        setPriceData(result.data.data);
+      }
 
-  //TODO : le montant de token n'est pas correctement remonté
+      fetchPriceData();
+    } catch (err) {
+      setError(err.message);
+    }
+  }, []);
 
   // Clear the data when the user disconnects or the address is empty
   useEffect(() => {
@@ -291,14 +328,16 @@ export default function Home() {
           onChange={(e) => setInputAddress(e.target.value)}
         />
         {sptToken < SPT_MIN_NUMBER ? (
-          <p className="mt-2 text-sm text-red-500">
-            You need at least {SPT_MIN_NUMBER} SPT to see the graph
+          <p className="mt-2 text-center text-sm text-red-500">
+            You need at least {SPT_MIN_NUMBER} SPT to see the graph and your
+            airdrop price estimation.
           </p>
         ) : (
-          <p className="mt-2 text-sm text-green-500">
+          <p className="mt-2 text-center text-sm text-green-500">
             You have at least {SPT_MIN_NUMBER} SPT, enjoy all features !
           </p>
         )}
+        <BuyButton />
       </section>
 
       <Separator />
@@ -356,6 +395,17 @@ export default function Home() {
         localData={localData}
         beetsAmount={beetsAmount}
         beetsHistory={beetsHistory}
+        sptToken={sptToken}
+        priceData={priceData}
+      />
+
+      <Separator />
+
+      <ShadowSection
+        shadowData={shadowData}
+        localData={localData}
+        shadowPoints={shadowPoints}
+        shadowHistory={shadowHistory}
         sptToken={sptToken}
         priceData={priceData}
       />

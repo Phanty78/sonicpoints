@@ -57,6 +57,11 @@
     rgb(188, 255, 47) 0%,
     rgb(0, 255, 135) 100%
   );
+  --shadow-gradient: linear-gradient(
+    232.68deg,
+    rgb(251, 198, 126) -9.94%,
+    rgb(255, 148, 1) 90.28%
+  );
 }
 
 :root {
@@ -176,6 +181,13 @@
 
   .text-gemx-gradient {
     background: var(--gemx-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .text-shadow-gradient {
+    background: var(--shadow-gradient);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;

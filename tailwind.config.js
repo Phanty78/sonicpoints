@@ -8,6 +8,7 @@ module.exports = {
         sonic: 'var(--sonic-gradient)',
         ring: 'var(--ring-gradient)',
         gemx: 'var(--gemx-gradient)',
+        shadow: 'var(--shadow-gradient)',
       },
     },
   },
