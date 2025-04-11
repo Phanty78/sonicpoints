@@ -62,7 +62,7 @@ export default function SiloSection({
                 </Tooltip>
               )}
             </p>
-            {siloPointsInUSD > 0 ? (
+            {sptToken >= SPT_MIN_NUMBER ? (
               <p className="dark:text-foreground text-base font-bold">
                 {siloData && priceData && (
                   <Tooltip>

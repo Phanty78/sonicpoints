@@ -56,7 +56,7 @@ export default function SwapXSection({
                 </Tooltip>
               )}
             </p>
-            {gemxAmountInUSD > 0 ? (
+            {sptToken >= SPT_MIN_NUMBER ? (
               <p className="dark:text-foreground text-base font-bold">
                 ≃ {gemxAmountInUSD.toFixed(2)} $
               </p>
